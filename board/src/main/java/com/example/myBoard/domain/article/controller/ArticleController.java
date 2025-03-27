@@ -3,6 +3,7 @@ package com.example.myBoard.domain.article.controller;
 import com.example.myBoard.domain.article.dto.ArticleRequestDto;
 import com.example.myBoard.domain.article.dto.ArticleResponseDto;
 import com.example.myBoard.domain.article.service.ArticleService;
+import com.example.myBoard.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -45,19 +46,32 @@ public class ArticleController {
     // 4. 게시글 상세
     @GetMapping("/{id}")
     public String articleDetail(@PathVariable Long id, Model model, HttpServletRequest request, HttpServletResponse response) {
-        ArticleResponseDto article = articleService.getArticle(id, request, response);
+
+        // 쿠키 유효성 검사
+        String cookiesName = "viewed_" + id;
+        boolean isFirstVisit = !CookieUtil.hasCookie(request, cookiesName);
+        if (isFirstVisit) {
+            articleService.increaseViewCount(id); // 조회수 증가
+            CookieUtil.addCookie(response, cookiesName, "true", 60 * 30);
+        }
+
+        // 게시글 조회
+        ArticleResponseDto article = articleService.getArticle(id);
         model.addAttribute("article", article);
         return "articles/detail";
     }
 
     // 5. 수정 폼
     @GetMapping("/{id}/edit")
-    public String editArticleForm(@PathVariable Long id, @ModelAttribute ArticleRequestDto dto) {
-
+    public String editArticleForm(@PathVariable Long id, Model model) {
+        ArticleResponseDto article = articleService.getArticle(id);
+        model.addAttribute("article", article);
         return "articles/edit";
     }
 
     // 6. 수정 처리
+
+
 
     // 7. 삭제 처리
 

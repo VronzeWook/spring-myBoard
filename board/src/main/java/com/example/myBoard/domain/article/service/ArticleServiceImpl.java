@@ -5,12 +5,11 @@ import com.example.myBoard.domain.article.dto.ArticleResponseDto;
 import com.example.myBoard.domain.article.entity.Article;
 import com.example.myBoard.domain.article.mapper.ArticleMapper;
 import com.example.myBoard.domain.article.repository.ArticleRepository;
-import com.example.myBoard.global.util.CookieUtil;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -31,18 +30,10 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleResponseDto getArticle(Long id, HttpServletRequest request, HttpServletResponse response) {
+    public ArticleResponseDto getArticle(Long id) {
         // 게시물이 존재하는지 확인 및 조회
         Article article = articleRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("게시글이 존재하지 않습니다."));
-
-        // 조회수 증가 (쿠키로 중복 방지)
-        String cookieName = "viewed_" + id;
-        if(!CookieUtil.hasCookie(request, cookieName)) {
-            article.increaseViewCount();
-            articleRepository.save(article);
-            CookieUtil.addCookie(response, cookieName, "true", 60 * 30);
-        }
 
         return articleMapper.toDto(article);
     }
@@ -84,5 +75,13 @@ public class ArticleServiceImpl implements ArticleService {
 
         // 삭제 실행
         articleRepository.delete(article);
+    }
+
+    @Transactional
+    @Override
+    public void increaseViewCount(Long id) {
+        Article article = articleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
+        article.increaseViewCount();
     }
 }
