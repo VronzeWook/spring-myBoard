@@ -1,7 +1,9 @@
 package com.example.myBoard.domain.article.controller;
 
-import com.example.myBoard.domain.article.dto.ArticleRequestDto;
+import com.example.myBoard.domain.article.dto.ArticleDeleteRequestDto;
+import com.example.myBoard.domain.article.dto.ArticleCreateRequestDto;
 import com.example.myBoard.domain.article.dto.ArticleResponseDto;
+import com.example.myBoard.domain.article.dto.ArticleUpdateRequestDto;
 import com.example.myBoard.domain.article.service.ArticleService;
 import com.example.myBoard.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,14 +33,14 @@ public class ArticleController {
 
     // 2. 글쓰기 폼
     @GetMapping("/new")
-    public String newArticle(Model model) {
-        model.addAttribute("article", new ArticleRequestDto());
-        return "articles/new";
+    public String createArticleForm(Model model) {
+        model.addAttribute("article", new ArticleCreateRequestDto());
+        return "articles/create";
     }
 
     // 3. 글 작성 처리
     @PostMapping
-    public String createArticle(@ModelAttribute ArticleRequestDto dto) {
+    public String createArticle(@ModelAttribute ArticleCreateRequestDto dto) {
         Long id = articleService.createArticle(dto);
         return "redirect:/articles/" + id;
     }
@@ -56,24 +58,30 @@ public class ArticleController {
         }
 
         // 게시글 조회
-        ArticleResponseDto article = articleService.getArticle(id);
+        ArticleResponseDto article = articleService.getArticleDetail(id);
         model.addAttribute("article", article);
         return "articles/detail";
     }
 
     // 5. 수정 폼
-    @GetMapping("/{id}/edit")
-    public String editArticleForm(@PathVariable Long id, Model model) {
-        ArticleResponseDto article = articleService.getArticle(id);
+    @GetMapping("/{id}/update")
+    public String updateArticleForm(@PathVariable Long id, Model model) {
+        ArticleResponseDto article = articleService.getArticleDetail(id);
         model.addAttribute("article", article);
-        return "articles/edit";
+        return "articles/update";
     }
 
     // 6. 수정 처리
-
-
+    @PostMapping("/{id}/update")
+    public String updateArticle(@PathVariable Long id, ArticleUpdateRequestDto dto) {
+        articleService.updateArticle(id, dto);
+        return "redirect:/articles/" + id;
+    }
 
     // 7. 삭제 처리
-
-
+    @PostMapping("/{id}/delete")
+    public String deleteArticle(@PathVariable Long id, @ModelAttribute ArticleDeleteRequestDto dto) {
+        articleService.deleteArticle(id, dto);
+        return "redirect:/articles/";
+    }
 }

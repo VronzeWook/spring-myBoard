@@ -1,6 +1,6 @@
 package com.example.myBoard.domain.article.mapper;
 
-import com.example.myBoard.domain.article.dto.ArticleRequestDto;
+import com.example.myBoard.domain.article.dto.ArticleCreateRequestDto;
 import com.example.myBoard.domain.article.dto.ArticleResponseDto;
 import com.example.myBoard.domain.article.entity.Article;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +11,7 @@ public class ArticleMapper {
 
     private final BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 
-    public Article toEntity(ArticleRequestDto dto) {
+    public Article toEntity(ArticleCreateRequestDto dto) {
         return Article.builder()
                 .title(dto.getTitle())
                 .content(dto.getContent())

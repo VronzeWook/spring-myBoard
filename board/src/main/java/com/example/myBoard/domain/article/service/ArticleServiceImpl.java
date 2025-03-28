@@ -1,7 +1,9 @@
 package com.example.myBoard.domain.article.service;
 
-import com.example.myBoard.domain.article.dto.ArticleRequestDto;
+import com.example.myBoard.domain.article.dto.ArticleDeleteRequestDto;
+import com.example.myBoard.domain.article.dto.ArticleCreateRequestDto;
 import com.example.myBoard.domain.article.dto.ArticleResponseDto;
+import com.example.myBoard.domain.article.dto.ArticleUpdateRequestDto;
 import com.example.myBoard.domain.article.entity.Article;
 import com.example.myBoard.domain.article.mapper.ArticleMapper;
 import com.example.myBoard.domain.article.repository.ArticleRepository;
@@ -22,7 +24,7 @@ public class ArticleServiceImpl implements ArticleService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     @Override
-    public Long createArticle(ArticleRequestDto dto) {
+    public Long createArticle(ArticleCreateRequestDto dto) {
         // 게시물 생성 후 저장 (저장 시 ID 생성)
         Article article = articleMapper.toEntity(dto);
         Article saved = articleRepository.save(article); // 실제 저장된 객체를 반환
@@ -30,7 +32,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleResponseDto getArticle(Long id) {
+    public ArticleResponseDto getArticleDetail(Long id) {
         // 게시물이 존재하는지 확인 및 조회
         Article article = articleRepository.findById(id)
                 .orElseThrow(()-> new IllegalArgumentException("게시글이 존재하지 않습니다."));
@@ -48,7 +50,7 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void updateArticle(Long id, ArticleRequestDto dto) {
+    public void updateArticle(Long id, ArticleUpdateRequestDto dto) {
         // 게시글이 존재하는지 확인
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
@@ -63,13 +65,13 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public void deleteArticle(Long id, String inputPassword) {
+    public void deleteArticle(Long id, ArticleDeleteRequestDto dto) {
         // 게시물이 존재하는지 확인
         Article article = articleRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("게시글이 존재하지 않습니다."));
 
         // 비밀번호가 일치하는지 확인
-        if(!passwordEncoder.matches(inputPassword, article.getPassword())) {
+        if(!passwordEncoder.matches(dto.getPassword(), article.getPassword())) {
             throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
         }
 
