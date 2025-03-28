@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:text="${article.title}">게시글</title>
+</head>
+<body>
+<h1 th:text="${article.title}">제목</h1>
+
+<p>작성자: <span th:text="${article.author}"></span></p>
+<p>작성일: <span th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+<p>수정일: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
+<p>조회수: <span th:text="${article.viewCount}"></span></p>
+
+<hr/>
+<p th:text="${article.content}">내용</p>
+
+<hr/>
+<a th:href="@{/articles/{id}/update(id=${article.id})}">수정</a>
+
+<form th:action="@{/articles/{id}/delete(id=${article.id})}" method="post" style="margin-top: 10px;">
+  <label>비밀번호 입력 후 삭제</label><br/>
+  <input type="password" name="password" placeholder="비밀번호 입력" required />
+  <button type="submit">삭제</button>
+</form>
+
+<br/>
+<a th:href="@{/articles}">목록으로</a>
+</body>
+</html>

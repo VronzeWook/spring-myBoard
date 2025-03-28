@@ -1,12 +1,44 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome Page</title>
+    <title>My Board - 홈</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            margin: 40px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-<h1>환영합니다!</h1>
-<p>테스트용 웰컴 페이지 ! ^^</p>
+
+<h1>Welcome to My Board</h1>
+<p>간단한 게시판 프로젝트입니다.</p>
+
+<!-- 게시글 목록 보기 버튼 -->
+<p>
+    <a th:href="@{/articles}" class="button">📄 게시글 목록 보기</a>
+</p>
+
 </body>
 </html>

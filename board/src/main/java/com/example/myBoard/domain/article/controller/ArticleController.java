@@ -25,28 +25,27 @@ public class ArticleController {
     // 1. 게시글 목록
     @GetMapping
     public String getArticleList(Model model) {
-        // Service 계층에서 게시글 리스트를 불러옴
         List<ArticleResponseDto> articles = articleService.getArticleList();
         model.addAttribute("articles", articles);
         return "articles/list";
     }
 
     // 2. 글쓰기 폼
-    @GetMapping("/new")
+    @GetMapping("/create")
     public String createArticleForm(Model model) {
         model.addAttribute("article", new ArticleCreateRequestDto());
         return "articles/create";
     }
 
     // 3. 글 작성 처리
-    @PostMapping
+    @PostMapping("/create")
     public String createArticle(@ModelAttribute ArticleCreateRequestDto dto) {
         Long id = articleService.createArticle(dto);
         return "redirect:/articles/" + id;
     }
 
     // 4. 게시글 상세
-    @GetMapping("/{id}")
+    @GetMapping("/{id:[0-9]+}")
     public String articleDetail(@PathVariable Long id, Model model, HttpServletRequest request, HttpServletResponse response) {
 
         // 쿠키 유효성 검사
