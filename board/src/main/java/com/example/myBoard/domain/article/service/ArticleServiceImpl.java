@@ -49,6 +49,7 @@ public class ArticleServiceImpl implements ArticleService {
                 .toList();
     }
 
+    @Transactional
     @Override
     public void updateArticle(Long id, ArticleUpdateRequestDto dto) {
         // 게시글이 존재하는지 확인

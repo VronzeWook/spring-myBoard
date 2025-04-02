@@ -9,6 +9,7 @@ import com.example.myBoard.global.util.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.actuate.management.HeapDumpWebEndpoint;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
+    private final HeapDumpWebEndpoint heapDumpWebEndpoint;
 
     // 1. 게시글 목록
     @GetMapping
@@ -72,7 +74,10 @@ public class ArticleController {
 
     // 6. 수정 처리
     @PostMapping("/{id}/update")
-    public String updateArticle(@PathVariable Long id, ArticleUpdateRequestDto dto) {
+    public String updateArticle(@PathVariable Long id, @ModelAttribute ArticleUpdateRequestDto dto) {
+        System.out.println("id = " + id);
+        System.out.println("dto title = " + dto.getTitle());
+        System.out.println("dto password = " + dto.getPassword());
         articleService.updateArticle(id, dto);
         return "redirect:/articles/" + id;
     }
@@ -81,6 +86,6 @@ public class ArticleController {
     @PostMapping("/{id}/delete")
     public String deleteArticle(@PathVariable Long id, @ModelAttribute ArticleDeleteRequestDto dto) {
         articleService.deleteArticle(id, dto);
-        return "redirect:/articles/";
+        return "redirect:/articles";
     }
 }

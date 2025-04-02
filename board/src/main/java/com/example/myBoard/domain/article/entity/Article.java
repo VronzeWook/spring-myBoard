@@ -2,10 +2,7 @@ package com.example.myBoard.domain.article.entity;
 import com.example.myBoard.domain.comment.entity.Comment;
 import com.example.myBoard.global.common.BaseTimeEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
