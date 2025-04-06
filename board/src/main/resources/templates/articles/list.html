@@ -1,16 +1,84 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title>게시글 목록</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 30px;
+      background-color: #f7f7f7;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+
+    .new-post {
+      display: block;
+      width: 150px;
+      margin: 20px auto;
+      padding: 10px 15px;
+      text-align: center;
+      background-color: #007bff;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+
+    .new-post:hover {
+      background-color: #0056b3;
+    }
+
+    .article-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .article-card {
+      background-color: white;
+      border-radius: 8px;
+      padding: 15px 20px;
+      margin-bottom: 15px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .article-title {
+      font-size: 1.2em;
+      color: #333;
+      text-decoration: none;
+    }
+
+    .article-author {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .article-title:hover {
+      text-decoration: underline;
+      color: #007bff;
+    }
+  </style>
 </head>
 <body>
-<h1>게시글 목록</h1>
-<a th:href="@{/articles/create}">새 글 작성</a>
-<ul>
-  <li th:each="article : ${articles}">
-    <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}"></a>
-    <span> | 작성자: <span th:text="${article.author}"></span> </span>
-  </li>
-</ul>
+
+<h1>📄 게시글 목록</h1>
+
+<a th:href="@{/articles/create}" class="new-post">+ 새 글 작성</a>
+
+<div class="article-list">
+  <div class="article-card" th:each="article : ${articles}">
+    <div>
+      <a th:href="@{/articles/{id}(id=${article.id})}" th:text="${article.title}" class="article-title"></a><br/>
+      <span class="article-author" th:text="'작성자: ' + ${article.author}"></span>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>

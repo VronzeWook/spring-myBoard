@@ -1,29 +1,133 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+  <meta charset="UTF-8">
   <title th:text="${article.title}">게시글</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f7f7f7;
+      padding: 40px;
+    }
+
+    .detail-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      color: #333;
+    }
+
+    .meta {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .meta span {
+      margin-right: 15px;
+    }
+
+    .content {
+      font-size: 1.1em;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: #444;
+    }
+
+    .actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 10px 15px;
+      text-decoration: none;
+      font-weight: bold;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.95em;
+    }
+
+    .edit-btn {
+      background-color: #28a745;
+      color: white;
+    }
+
+    .edit-btn:hover {
+      background-color: #218838;
+    }
+
+    .delete-form {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .delete-form input {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .delete-btn {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    .delete-btn:hover {
+      background-color: #c82333;
+    }
+
+    .back-link {
+      display: block;
+      margin-top: 30px;
+      text-align: center;
+      color: #555;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      text-decoration: underline;
+    }
+
+  </style>
 </head>
 <body>
-<h1 th:text="${article.title}">제목</h1>
 
-<p>작성자: <span th:text="${article.author}"></span></p>
-<p>작성일: <span th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></span></p>
-<p>수정일: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span></p>
-<p>조회수: <span th:text="${article.viewCount}"></span></p>
+<div class="detail-container">
+  <h1 th:text="${article.title}">제목</h1>
 
-<hr/>
-<p th:text="${article.content}">내용</p>
+  <div class="meta">
+    <span>작성자: <span th:text="${article.author}"></span></span>
+    <span>작성일: <span th:text="${#temporals.format(article.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+    <span>수정일: <span th:text="${#temporals.format(article.updatedAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+    <span>조회수: <span th:text="${article.viewCount}"></span></span>
+  </div>
 
-<hr/>
-<a th:href="@{/articles/{id}/update(id=${article.id})}">수정</a>
+  <div class="content" th:text="${article.content}">
+    게시글 내용
+  </div>
 
-<form th:action="@{/articles/{id}/delete(id=${article.id})}" method="post" style="margin-top: 10px;">
-  <label>비밀번호 입력 후 삭제</label><br/>
-  <input type="password" name="password" placeholder="비밀번호 입력" required />
-  <button type="submit">삭제</button>
-</form>
+  <div class="actions">
+    <a th:href="@{/articles/{id}/update(id=${article.id})}" class="btn edit-btn">✏️ 수정</a>
 
-<br/>
-<a th:href="@{/articles}">목록으로</a>
+    <form th:action="@{/articles/{id}/delete(id=${article.id})}" method="post" class="delete-form">
+      <input type="password" name="password" placeholder="비밀번호 입력" required />
+      <button type="submit" class="btn delete-btn">🗑 삭제</button>
+    </form>
+  </div>
+
+  <a th:href="@{/articles}" class="back-link">← 목록으로 돌아가기</a>
+</div>
+
 </body>
 </html>
