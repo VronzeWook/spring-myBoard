@@ -22,7 +22,6 @@ import java.util.List;
 public class ArticleController {
 
     private final ArticleService articleService;
-    private final HeapDumpWebEndpoint heapDumpWebEndpoint;
 
     // 1. 게시글 목록
     @GetMapping
